@@ -1,0 +1,18 @@
+gcc -O2 -std=c17 -Wall -Wextra mkfs_builder.c -o mkfs_builder
+gcc -O2 -std=c17 -Wall -Wextra mkfs_adder.c   -o mkfs_adder
+
+
+./mkfs_builder --image fs.img --size-kib 1024 --inodes 128
+will show something like this Created MiniVSFS image 'fs.img' : 1024 KiB, 128 inodes, 256 blocks, data region starts at= ( #7) this may vary  
+
+./mkfs_adder --input fs.img --output fs.img --file file_12.txt
+./mkfs_adder --input fs.img --output fs.img --file file_14.txt
+./mkfs_adder --input fs.img --output fs.img --file file_33.txt
+
+
+#data region starts at= ( #7)
+# block 7 offset = 7*4096 = 28672
+
+
+xxd -s 28672 -l 512 fs.img
+dd if=fs.img bs=4096 skip=8 count=2 | xxd
